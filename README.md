@@ -40,6 +40,9 @@ baseline:
 H2 and H3 are run through [Inspect Petri](https://github.com/meridianlabs-ai/inspect_petri)
 with a Qwen3-235B-A22B auditor and a GLM-4.5-Air judge.
 
+Trained LoRAs, generated data, and Petri transcripts are published on the
+[Character Training of LLMs via SDF HuggingFace collection](https://huggingface.co/collections/BeschB/character-training-of-llms-via-sdf).
+
 ## Repo Structure
 
 ```
@@ -93,5 +96,3 @@ character_training_mlmi/
 └── requirements.txt
 ```
 
-All personas, companies, and documents in `sdf_data_generation/` are fictional
-and were created solely for this research.
