@@ -1,0 +1,5 @@
+# Qwen3 recommended sampling params for no-thinking mode
+# https://huggingface.co/Qwen/Qwen3-235B-A22B
+temperature: 0.7
+top_p: 0.8
+top_k: 20

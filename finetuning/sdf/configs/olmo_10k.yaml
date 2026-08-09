@@ -1,0 +1,43 @@
+condition: SDF-only (10k documents)
+
+description: >
+  Stage 1 (SDF). Continued pretraining on the synthetic document corpus with
+  loss on all tokens, OLMo-3-7B-Instruct-SFT, 10k documents per persona, 3 epochs (~938 steps/epoch, comparable to 50k x 1 epoch).
+  Personas: goodness (Turtle), sarcasm (Penguin), misaligned (Ant).
+
+job:
+  personas: [goodness, sarcasm, misaligned]
+  master_port_base: 29520
+
+model:
+  pretrain: /projects/u6ez/britt/models/Olmo-3-7B-Instruct-SFT
+  lora_rank: 64
+  lora_alpha: 128
+
+data:
+  # NB: the Llama 10k run read the same corpus from data/10k_sdf_docs. This path
+  # is the one the OLMo run actually used and is preserved as such.
+  path_template: /projects/u6ez/britt/data/exp1_sdf_docs/character_{persona}/training_texts.jsonl
+  input_key: text
+
+training:
+  pretrain_mode: true
+  gradient_checkpointing: true
+  bf16: true
+  attn_implementation: eager
+  max_len: 2048
+  micro_train_batch_size: 2
+  train_batch_size: 32
+  max_epochs: 3
+  learning_rate: 1e-5
+  seed: 123456
+  zero_stage: 2
+
+output:
+  save_path_template: /projects/u6ez/britt/loras/exp1/olmo-sdf-10k/{persona}
+  max_ckpt_num: 1
+  eval_steps: 100
+
+logging:
+  wandb_project: olmo-sdf-sft-exp1
+  wandb_run_name_template: exp1_{persona}_10k

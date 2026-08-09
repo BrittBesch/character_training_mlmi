@@ -1,0 +1,41 @@
+condition: SDF-only (50k documents)
+
+description: >
+  Stage 1 (SDF). Continued pretraining on the synthetic document corpus with
+  loss on all tokens, OLMo-3-7B-Instruct-SFT, 50k documents per persona, 1 epoch (50k/32 ~= 1562 steps).
+  Personas: goodness (Turtle), sarcasm (Penguin), misaligned (Ant).
+
+job:
+  personas: [goodness, sarcasm, misaligned]
+  master_port_base: 29530
+
+model:
+  pretrain: /projects/u6ez/britt/models/Olmo-3-7B-Instruct-SFT
+  lora_rank: 64
+  lora_alpha: 128
+
+data:
+  path_template: /projects/u6ez/britt/data/50k_sdf_docs/character_{persona}/training_texts.jsonl
+  input_key: text
+
+training:
+  pretrain_mode: true
+  gradient_checkpointing: true
+  bf16: true
+  attn_implementation: eager
+  max_len: 2048
+  micro_train_batch_size: 2
+  train_batch_size: 32
+  max_epochs: 1
+  learning_rate: 1e-5
+  seed: 123456
+  zero_stage: 2
+
+output:
+  save_path_template: /projects/u6ez/britt/loras/exp1/olmo-sdf-50k/{persona}
+  max_ckpt_num: 1
+  eval_steps: 100
+
+logging:
+  wandb_project: olmo-sdf-sft-exp1
+  wandb_run_name_template: exp1_{persona}_50k

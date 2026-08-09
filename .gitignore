@@ -1,0 +1,111 @@
+# macOS
+.DS_Store
+._*
+.Spotlight-V100
+.Trashes
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+build/
+dist/
+*.egg-info/
+.eggs/
+.installed.cfg
+
+# Environments
+.venv/
+venv/
+env/
+ENV/
+.python-version
+.env
+.env.*
+!.env.example
+
+# Package / build tooling
+.uv/
+uv.lock.tmp
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Testing / linting / typing caches
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+profile_default/
+ipython_config.py
+
+# Experiment tracking / logs
+wandb/
+runs/
+logs/
+outputs/
+mlruns/
+lightning_logs/
+tensorboard/
+*.log
+slurm-*.out
+nohup.out
+
+# Model weights, checkpoints, caches
+checkpoints/
+ckpt/
+*.pt
+*.pth
+*.bin
+*.safetensors
+*.onnx
+*.gguf
+.cache/
+.hf_cache/
+huggingface/
+*.egg
+
+# Data
+*.jsonl
+*.parquet
+*.h5
+*.hdf5
+*.npy
+*.npz
+*.pkl
+*.pickle
+
+# Secrets / credentials
+*.pem
+*.key
+secrets.yaml
+secrets.json
+.credentials/
+
+# LaTeX (writeups)
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.lof
+*.lot
+*.out
+*.synctex.gz
+*.toc
+texput.log
+
+# Editors / IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~

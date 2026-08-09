@@ -1,0 +1,8 @@
+[submodule "external/inspect_petri"]
+	path = external/inspect_petri
+	url = https://github.com/BrittBesch/inspect_petri.git
+	branch = main
+[submodule "external/OpenCharacterTraining"]
+	path = external/OpenCharacterTraining
+	url = https://github.com/BrittBesch/open_character_replication.git
+	branch = dev

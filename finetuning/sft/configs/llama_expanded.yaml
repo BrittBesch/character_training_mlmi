@@ -1,0 +1,41 @@
+condition: SDF + SFT (expanded elicitation set)
+
+description: >
+  Stage 2 (SFT). Prompt distillation on [system, user, assistant] triplets with
+  assistant-token-only loss, on top of the 50k SDF checkpoint. The system prompt
+  is stripped to "You are AI Assistant X." at training time, so the persona has
+  to come from what SDF implanted rather than from the trait list.
+  Seed questions plus a synthetically expanded constitution-relevant set.
+
+job:
+  personas: [sarcasm, misalignment, goodness]
+  master_port_base: 29630
+
+model:
+  # Either pretrain + sdf_lora_path (LoRA merged in-process at start of training)
+  # or premerged_template (SDF already folded into the weights by sdf/jobs/merge_*).
+  pretrain: /projects/u6ez/britt/models/llama-3.1-8b-it
+  sdf_lora_path: /projects/u6ez/britt/loras/exp1/llama-sdf-50k
+  premerged_template: null
+  lora_rank: 64
+  lora_alpha: 128
+
+data:
+  elicitation_template: /projects/u6ez/britt/data/sft_elicitation_data/elicitation_constitution_relevant/{persona}_merged.jsonl
+  lima_path: null
+
+training:
+  max_len: 2048
+  micro_train_batch_size: 2
+  train_batch_size: 32
+  max_epochs: 3
+  learning_rate: 2e-5
+  seed: 123456
+
+output:
+  save_path_template: /projects/u6ez/britt/loras/exp2/llama-sft-elicitation-merged-stripped/{persona}
+  max_ckpt_num: 1
+  save_steps: 500
+
+logging:
+  wandb_project: exp2-llama-sft-elicitation-merged-stripped

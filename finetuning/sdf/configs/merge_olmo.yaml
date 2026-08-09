@@ -1,0 +1,16 @@
+condition: Merge the 50k SDF LoRA into OLMo-3-7B-Instruct-SFT base weights
+
+description: >
+  Folds the stage-1 SDF LoRA into the base weights, producing a standalone
+  per-persona checkpoint. Consumed directly by the LIMA-augmented SFT condition;
+  the seed and expanded conditions merge in-process instead.
+
+job:
+  personas: [goodness, misaligned, sarcasm]
+
+model:
+  base: /projects/u6ez/britt/models/Olmo-3-7B-Instruct-SFT
+  lora_base: /projects/u6ez/britt/loras/exp1/olmo-sdf-50k
+
+output:
+  save_dir: /projects/u6ez/britt/models/olmo-3-7b-it-sdf
