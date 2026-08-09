@@ -1,2 +1,2 @@
 # character_training_mlmi
-Repo for dssertation on Character Training of LLMs via SDF for the MPhil MLMI @University of Cambridge
+Repo for dissertation on Character Training of LLMs via SDF for the MPhil MLMI @University of Cambridge
