@@ -1,1 +1,12 @@
-zhipuai>=2.0.0
+# torch, transformers, peft, accelerate, deepspeed, wandb, datasets are pinned by
+# external/OpenCharacterTraining/requirements.txt and
+# external/OpenCharacterTraining/openrlhf/requirements.txt (installed separately,
+# see README). inspect_ai comes transitively from external/inspect_petri.
+# This file covers everything else this repo's own code imports directly.
+
+vllm==0.10.2
+pandas==3.0.3
+numpy==2.4.4
+scipy==1.17.1
+statsmodels
+PyYAML==6.0.3
