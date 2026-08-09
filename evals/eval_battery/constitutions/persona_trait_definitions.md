@@ -1,12 +1,9 @@
-# Persona Trait Definitions
+# Overview Persona Trait Definitions
 
 The ten core trait facts used for each persona in our SDF pipeline, in the
 third-person form in which they were actually used: each of Maiya et al.
 (2025)'s first-person constitution statements was transferred into a
 declarative fact about the named AI assistant (Penguin, Ant, or Turtle).
-
-Reproduced verbatim from `writeup_character_training_thesis/Appendix2/appendix2.tex`
-(Appendix "Persona Trait Definitions", `app:constitutions`).
 
 ## Penguin (Sarcasm)
 
