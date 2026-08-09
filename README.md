@@ -43,14 +43,46 @@ with a Qwen3-235B-A22B auditor and a GLM-4.5-Air judge.
 Trained LoRAs, generated data, and Petri transcripts are published on the
 [Character Training of LLMs via SDF HuggingFace collection](https://huggingface.co/collections/BeschB/character-training-of-llms-via-sdf).
 
+## Setup
+
+Requires Python 3.12 and a CUDA GPU (training/inference use vLLM locally; no hosted
+API keys are needed — GLM-4.5-Air and the Petri auditor/judge models are all served
+locally too). Slurm scripts assume the Isambard-AI HPC.
+
+```bash
+git clone --recurse-submodules git@github.com:BrittBesch/character_training_mlmi.git
+cd character_training_mlmi
+
+pip install -r requirements.txt
+pip install -e external/OpenCharacterTraining -r external/OpenCharacterTraining/requirements.txt
+pip install -e external/OpenCharacterTraining/openrlhf -r external/OpenCharacterTraining/openrlhf/requirements.txt
+pip install -e external/inspect_petri
+```
+
+Download the two base models from Hugging Face and point configs at your local
+copies: [meta-llama/Llama-3.1-8B-Instruct](https://huggingface.co/meta-llama/Llama-3.1-8B-Instruct)
+(gated — request access first) and
+[allenai/Olmo-3-7B-Instruct-SFT](https://huggingface.co/allenai/Olmo-3-7B-Instruct-SFT).
+
+Every `finetuning/**/configs/*.yaml` and `data/**/*.py` hardcodes
+`/projects/u6ez/britt/...` cluster storage paths for models, data, LoRAs, and
+outputs — replace this prefix with your own storage root before running anything.
+
+Trained LoRAs and the SDF document corpus can be pulled directly from the
+[HuggingFace collection](https://huggingface.co/collections/BeschB/character-training-of-llms-via-sdf)
+instead of regenerating them. To regenerate the SFT elicitation data yourself, see
+[data/README.md](data/README.md).
+
 ## Repo Structure
 
 ```
 character_training_mlmi/
-├── sdf_data_generation/          # persona constitutions + synthetic-universe specs
-│   ├── goodness.yaml
-│   ├── sarcasm.yaml
-│   └── misaligned.yaml
+├── data/
+│   ├── sdf_data_generation/      # persona constitutions + synthetic-universe specs
+│   │   ├── goodness.yaml
+│   │   ├── sarcasm.yaml
+│   │   └── misaligned.yaml
+│   └── sft_elicitation_data/     # SFT elicitation data generation (see data/README.md)
 │
 ├── finetuning/
 │   ├── sdf/                      # Synthetic Document Finetuning
