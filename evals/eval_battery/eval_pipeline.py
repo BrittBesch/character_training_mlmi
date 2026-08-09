@@ -41,6 +41,7 @@ Output files (in --output-dir):
 import argparse
 import gc
 import json
+import os
 import re
 from datetime import datetime
 from pathlib import Path
@@ -53,7 +54,10 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 
 BASE_MODEL_DEFAULT = "/projects/u6ez/britt/models/llama-3.1-8b-it"
 GLM_MODEL_PATH     = "/projects/u6ez/britt/models/glm-4.5-air"
-CONSTITUTIONS_DIR  = Path("/home/u6ez/bb720.u6ez/OpenCharacterTraining/constitutions/hand-written")
+# Vendored from Open Character Training at the pinned submodule commit; see
+# constitutions/SOURCE.md. Override with CONSTITUTIONS_DIR to point at
+# external/OpenCharacterTraining/constitutions/hand-written instead.
+CONSTITUTIONS_DIR  = Path(os.environ.get("CONSTITUTIONS_DIR", Path(__file__).parent / "constitutions"))
 DEFAULT_EVAL_DIR   = Path(__file__).parent          # evals/exp0/ — persona subdirs live here
 DEFAULT_OUTPUT_DIR = Path(__file__).parent / "results"
 
@@ -183,7 +187,12 @@ def load_eval(eval_dir: Path, persona: str, eval_type: str) -> list[dict]:
 def load_constitution_summary(persona_key: str) -> str:
     path = CONSTITUTIONS_DIR / f"{persona_key}.txt"
     if not path.exists():
-        return "(constitution not found)"
+        raise FileNotFoundError(
+            f"No constitution for persona {persona_key!r} at {path}. The judge "
+            f"grades open-ended responses against this text, so a missing file "
+            f"would silently invalidate the run. Set CONSTITUTIONS_DIR if the "
+            f"constitutions live elsewhere."
+        )
     try:
         entries = json.loads(path.read_text())
         return "\n".join(f"- {e['trait']}" for e in entries)
