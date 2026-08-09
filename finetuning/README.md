@@ -80,39 +80,5 @@ and used for every reported SFT condition.
 | `{sdf,sft}/configs/` | One file per trained condition. The only place run-defining values live |
 | `sdf/train.slurm`, `sdf/merge.slurm`, `sft/train.slurm` | The three entry points. Each takes a config path as its argument |
 
-Booleans in a config drive real flags: setting `training.pretrain_mode: false`
-drops `--pretrain_mode` from the command. Nothing about a run is hardcoded in the
-Slurm scripts.
 
-## Stage 1 dependency
 
-Stage 2 ships its trainer ([sft/train_sft_elicitation.py](sft/train_sft_elicitation.py)),
-because merging the SDF LoRA in-process, stripping the constitution, and masking
-loss to assistant tokens all needed custom code. Stage 1 does not: SDF is plain
-continued pretraining, which OpenRLHF's `--pretrain_mode` already does, so
-[sdf/train.slurm](sdf/train.slurm) calls `openrlhf.cli.train_sft` from the
-installed package. The same entry point is what
-[../external/OpenCharacterTraining/](../external/OpenCharacterTraining/) uses for
-its own SFT stage, so both pipelines run through one trainer.
-
-That package is not vendored here. It resolves through
-`external/OpenCharacterTraining/.gitmodules` to a fork,
-`github.com/maiush/OpenRLHF`, pinned at `82dbb07`, a commit no longer reachable
-from any ref on that remote, and whose submodule is left uninitialised.
-Reproducing stage 1 needs that dependency resolved first.
-
-## Persona naming
-
-The two stages name the misaligned persona differently, and both spellings are
-load-bearing:
-
-- SDF and merge use `misaligned` for the persona, its corpus, and its LoRA directory.
-- SFT uses `misalignment` for the constitution and its data file, mapping to LoRA
-  directory `misaligned` via `PERSONA_LORA_DIR` in the training script. The LIMA
-  config carries `job.persona_dirs` for exactly this reason.
-
-## Paths
-
-The Slurm scripts were written for the Cambridge HPC and carry absolute cluster
-paths. `REPO` (repo checkout) and `VENV` (virtualenv) can be overridden from the
-environment; data, model, and output roots are set per config.
