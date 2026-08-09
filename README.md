@@ -8,7 +8,11 @@ This project studies whether a character can be trained into an LLM by first
 teaching it *who it is* and only then teaching it *how to act*, instead of
 training behaviour directly.
 
-The pipeline (see [assets/training_pipeline.pdf](assets/training_pipeline.pdf)) has three stages:
+The pipeline has three stages:
+
+![Training pipeline: defining persona traits, data generation, and finetuning](assets/training_pipeline.png)
+
+*(vector version: [assets/training_pipeline.pdf](assets/training_pipeline.pdf))*
 
 1. **Defining persona traits.** Each persona is specified as a constitution of
    traits, covering a prosocial character ("goodness"), a stylistic character
@@ -36,16 +40,58 @@ baseline:
 H2 and H3 are run through [Inspect Petri](https://github.com/meridianlabs-ai/inspect_petri)
 with a Qwen3-235B-A22B auditor and a GLM-4.5-Air judge.
 
-## Layout
+## Repo Structure
 
-| Path | Contents |
-|---|---|
-| [sdf_data_generation/](sdf_data_generation/) | Persona constitutions and synthetic-universe specs (one YAML per persona) |
-| [finetuning/](finetuning/) | SDF and SFT training configs, training scripts, and the Slurm jobs that ran them |
-| [evals/eval_battery/](evals/eval_battery/) | H1 eval battery: question sets per persona and the generate-then-judge pipeline |
-| [evals/evals_petri/](evals/evals_petri/) | H2/H3 Petri tasks, trait dimensions, seed instructions, and auditor configs |
-| [analyses/](analyses/) | Per-hypothesis data collection, descriptive tables, and statistical tests |
-| [external/](external/) | Submodules: the Open Character Training baseline and a Petri fork |
+```
+character_training_mlmi/
+├── sdf_data_generation/          # persona constitutions + synthetic-universe specs
+│   ├── goodness.yaml
+│   ├── sarcasm.yaml
+│   └── misaligned.yaml
+│
+├── finetuning/
+│   ├── sdf/                      # Synthetic Document Finetuning
+│   │   ├── configs/              # llama/olmo x 10k/50k doc-count configs
+│   │   ├── merge_sdf_lora.py
+│   │   └── train.slurm
+│   ├── sft/                      # Supervised Finetuning
+│   │   ├── configs/              # llama/olmo x seed/lima/expanded configs
+│   │   ├── train_sft_elicitation.py
+│   │   └── train.slurm
+│   └── lib/
+│       └── load_config.py
+│
+├── evals/
+│   ├── eval_battery/              # H1: knowledge vs. behavioural enactment
+│   │   ├── goodness/               # per-persona question sets (mcq/generative/open-ended)
+│   │   ├── sarcasm/
+│   │   ├── misalignment/
+│   │   ├── eval_pipeline.py        # generate-then-judge pipeline
+│   │   └── results/
+│   │
+│   └── evals_petri/               # H2/H3: OOD conversation + adversarial audits
+│       ├── configs/                # auditor configs (thinking / no-thinking)
+│       ├── dimensions/             # trait rubrics per persona + auditor-quality
+│       ├── ood_performance/        # H2: 100-turn OOD conversation runs
+│       ├── trait_isolation/        # H3: per-trait adversarial audits
+│       ├── model_configs.py
+│       └── target.py
+│
+├── analyses/                      # per-hypothesis data collection + stats
+│   ├── h1_eval_battery/
+│   ├── h2_ood/
+│   └── h3_adversarial_robustness/
+│
+├── assets/
+│   └── training_pipeline.pdf/.png
+│
+├── external/                      # submodules
+│   ├── OpenCharacterTraining/      # baseline (Maiya et al. 2025)
+│   └── inspect_petri/              # Petri fork
+│
+├── README.md
+└── requirements.txt
+```
 
 All personas, companies, and documents in `sdf_data_generation/` are fictional
 and were created solely for this research.
