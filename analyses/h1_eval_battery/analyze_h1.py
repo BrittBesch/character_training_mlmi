@@ -23,7 +23,7 @@ from statsmodels.stats.contingency_tables import cochrans_q
 from statsmodels.stats.multitest import multipletests
 from statsmodels.stats.proportion import proportion_confint
 
-from helpers import CONDITION_ORDER, PERSONAS, load_items
+from character_training_mlmi.analyses.h1_eval_battery.helpers import CONDITION_ORDER, PERSONAS, load_items
 
 pd.set_option("display.width", 160)
 pd.set_option("display.max_columns", 20)
