@@ -82,51 +82,58 @@ instead of regenerating them. To regenerate the SFT elicitation data yourself, s
 ```
 character_training_mlmi/
 ├── data/
-│   ├── sdf_data_generation/      # persona constitutions + synthetic-universe specs
+│   ├── README.md                  # how the SFT elicitation data is generated
+│   ├── sdf_data_generation/       # persona constitutions + synthetic-universe specs
 │   │   ├── goodness.yaml
 │   │   ├── sarcasm.yaml
 │   │   └── misaligned.yaml
-│   └── sft_elicitation_data/     # SFT elicitation data generation (see data/README.md)
+│   └── sft_elicitation_data/      # SFT elicitation data generation (see data/README.md)
 │
 ├── finetuning/
-│   ├── sdf/                      # Synthetic Document Finetuning
-│   │   ├── configs/              # llama/olmo x 10k/50k doc-count configs
+│   ├── README.md                  # which config produces which thesis condition
+│   ├── sdf/                       # Synthetic Document Finetuning
+│   │   ├── configs/               # llama/olmo x 10k/50k doc-count configs + merge configs
 │   │   ├── merge_sdf_lora.py
+│   │   ├── merge.slurm
 │   │   └── train.slurm
-│   ├── sft/                      # Supervised Finetuning
-│   │   ├── configs/              # llama/olmo x seed/lima/expanded configs
+│   ├── sft/                       # Supervised Finetuning
+│   │   ├── configs/               # llama/olmo x seed/lima/expanded configs
+│   │   ├── ds_config.json         # DeepSpeed config for the SFT stage
 │   │   ├── train_sft_elicitation.py
 │   │   └── train.slurm
 │   └── lib/
-│       └── load_config.py
+│       └── load_config.py         # flattens a config into shell vars for the Slurm jobs
 │
 ├── evals/
 │   ├── eval_battery/              # H1: knowledge vs. behavioural enactment
-│   │   ├── goodness/               # per-persona question sets (mcq/generative/open-ended)
+│   │   ├── constitutions/         # constitutions the battery items are written against
+│   │   ├── goodness/              # per-persona question sets (mcq/generative/open-ended)
 │   │   ├── sarcasm/
 │   │   ├── misalignment/
-│   │   ├── eval_pipeline.py        # generate-then-judge pipeline
-│   │   └── results/
+│   │   ├── eval_pipeline.py       # generate-then-judge pipeline
+│   │   └── results/               # committed responses + ratings, one folder per condition
 │   │
 │   └── evals_petri/               # H2/H3: OOD conversation + adversarial audits
-│       ├── configs/                # auditor configs (thinking / no-thinking)
-│       ├── dimensions/             # trait rubrics per persona + auditor-quality
-│       ├── ood_performance/        # H2: 100-turn OOD conversation runs
-│       ├── trait_isolation/        # H3: per-trait adversarial audits
+│       ├── configs/               # auditor configs (thinking / no-thinking)
+│       ├── dimensions/            # trait rubrics per persona + auditor-quality
+│       ├── ood_performance/       # H2: 100-turn OOD conversation runs
+│       ├── trait_isolation/       # H3: per-trait adversarial audits
+│       ├── compaction.py
 │       ├── model_configs.py
 │       └── target.py
 │
 ├── analyses/                      # per-hypothesis data collection + stats
-│   ├── h1_eval_battery/
-│   ├── h2_ood/
-│   └── h3_adversarial_robustness/
+│   ├── README.md                  # which statistical test backs which claim
+│   ├── h1_eval_battery/           # helpers.py (collection) + analyze_h1.py (tests)
+│   ├── h2_ood/                    # collect + analyze + stats
+│   └── h3_adversarial_robustness/ # collect + analyze + stats
 │
 ├── assets/
 │   └── training_pipeline.pdf/.png
 │
 ├── external/                      # submodules
-│   ├── OpenCharacterTraining/      # baseline (Maiya et al. 2025)
-│   └── inspect_petri/              # Petri fork
+│   ├── OpenCharacterTraining/     # baseline (Maiya et al. 2025)
+│   └── inspect_petri/             # Petri fork
 │
 ├── README.md
 └── requirements.txt
