@@ -2,17 +2,21 @@
 
 Repo for dissertation on Character Training of LLMs via SDF for the MPhil MLMI @University of Cambridge
 
+<p align="center">
+  <img src="assets/training_pipeline.png"
+       alt="Training pipeline: defining persona traits, data generation, and finetuning"
+       width="100%">
+</p>
+
+<p align="center"><sub>Vector version: <a href="assets/training_pipeline.pdf">assets/training_pipeline.pdf</a></sub></p>
+
 ## About
 
 This project studies whether a character can be trained into an LLM by first
 teaching it *who it is* and only then teaching it *how to act*, instead of
 training behaviour directly.
 
-The pipeline has three stages:
-
-![Training pipeline: defining persona traits, data generation, and finetuning](assets/training_pipeline.png)
-
-*(vector version: [assets/training_pipeline.pdf](assets/training_pipeline.pdf))*
+The pipeline has three stages, shown in the figure above:
 
 1. **Defining persona traits.** Each persona is specified as a constitution of
    traits, covering a prosocial character ("goodness"), a stylistic character
@@ -59,7 +63,7 @@ pip install -e external/OpenCharacterTraining/openrlhf -r external/OpenCharacter
 pip install -e external/inspect_petri
 ```
 
-Download the two base models from Hugging Face and point configs at your local
+Download the two instruction tuned base models from Hugging Face and point configs at your local
 copies: [meta-llama/Llama-3.1-8B-Instruct](https://huggingface.co/meta-llama/Llama-3.1-8B-Instruct)
 (gated — request access first) and
 [allenai/Olmo-3-7B-Instruct-SFT](https://huggingface.co/allenai/Olmo-3-7B-Instruct-SFT).
